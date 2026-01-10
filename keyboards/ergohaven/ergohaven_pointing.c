@@ -197,7 +197,7 @@ bool process_record_pointing(uint16_t keycode, keyrecord_t *record) {
         case EH_USR1:
         case EH_USR2:
         case EH_USR3: {
-            static uint16_t        press_timer        = 0;
+            // static uint16_t        press_timer        = 0;
             static pointing_mode_t prev_pointing_mode = POINTING_MODE_NORMAL;
 
             const pointing_mode_t NEW_MODE = POINTING_MODE_SNIPER + (keycode - EH_SNP);
@@ -205,15 +205,16 @@ bool process_record_pointing(uint16_t keycode, keyrecord_t *record) {
             if (record->event.pressed) {
                 prev_pointing_mode = pointing_mode;
                 set_pointing_mode(NEW_MODE);
-                press_timer = timer_read();
+                // press_timer = timer_read();
             } else {
-                if (timer_elapsed(press_timer) < get_tapping_term(keycode, record)) {
-                    if (prev_pointing_mode == NEW_MODE)
-                        set_pointing_mode(POINTING_MODE_NORMAL);
-                    else
-                        set_pointing_mode(NEW_MODE);
-                } else
-                    set_pointing_mode(POINTING_MODE_NORMAL);
+                // Toggle logic disabled - mode works only while button is held
+                // if (timer_elapsed(press_timer) < get_tapping_term(keycode, record)) {
+                //     if (prev_pointing_mode == NEW_MODE)
+                //         set_pointing_mode(POINTING_MODE_NORMAL);
+                //     else
+                //         set_pointing_mode(NEW_MODE);
+                // } else
+                set_pointing_mode(prev_pointing_mode);
             }
             return false;
         }
